@@ -15,7 +15,7 @@ Copyright 2014 Newcastle University
 */
 
 /*
- This extension allows you to use jsxGraph to create pretty graphs inside question content.
+ This extension adds a JME data type to represent permutations.
 */
 
 Numbas.queueScript('extensions/permutations/permutations.js',['jme','jme-display'],function() {

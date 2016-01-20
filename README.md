@@ -5,6 +5,11 @@ This extension adds a new data type to the Numbas JME system, representing eleme
 
 Permutations are stored as bijections on the natural numbers.
 
+JME data type
+-------------
+
+This extension adds a new JME data type, `Numbas.jme.types.permutation`, representing a permutation.
+
 JME Functions
 ---------
 

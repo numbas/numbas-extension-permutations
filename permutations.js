@@ -18,9 +18,7 @@ Copyright 2014 Newcastle University
  This extension adds a JME data type to represent permutations.
 */
 
-Numbas.queueScript('extensions/permutations/permutations.js',['jme','jme-display'],function() {
-	var permutations = Numbas.extensions.permutations = {};
-
+Numbas.addExtension('permutations',['jme','jme-display'],function(permutations) {
 	var Permutation = permutations.Permutation = function(to) {
 		if(to==undefined) {
 			to = [];

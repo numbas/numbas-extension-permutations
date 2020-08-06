@@ -1,0 +1,90 @@
+{
+    "input_widget": "string",
+    "settings": [
+        {
+            "help_url": "",
+            "hint": "",
+            "label": "Correct answer",
+            "name": "correct_answer",
+            "input_type": "code",
+            "default_value": "",
+            "evaluate": true
+        },
+        {
+            "help_url": "",
+            "hint": "",
+            "name": "must_be_disjoint",
+            "input_type": "checkbox",
+            "default_value": false,
+            "label": "Must the cycles be disjoint?"
+        },
+        {
+            "help_url": "",
+            "hint": "",
+            "name": "must_be_transpositions",
+            "input_type": "checkbox",
+            "default_value": false,
+            "label": "Must the cycles be transpositions?"
+        }
+    ],
+    "help_url": "",
+    "extensions": [
+        "permutations"
+    ],
+    "source": {
+        "author": {
+            "name": "Christian Lawson-Perfect"
+        }
+    },
+    "marking_notes": [
+        {
+            "name": "mark",
+            "definition": "apply(student_permutation);\napply(is_correct);\napply(is_disjoint);\napply(is_transpositions)",
+            "description": "This is the main marking note. It should award credit and provide feedback based on the student's answer."
+        },
+        {
+            "name": "interpreted_answer",
+            "definition": "student_permutation",
+            "description": "A value representing the student's answer to this part."
+        },
+        {
+            "name": "is_correct",
+            "definition": "correctif(student_permutation=settings[\"correct_answer\"])",
+            "description": ""
+        },
+        {
+            "name": "is_disjoint",
+            "definition": "if(is_disjoint(studentAnswer),\n  true\n,\n  if(settings[\"must_be_disjoint\"],\n    set_credit(0,\"You have not written your answer as a product of disjoint cycles.\")\n  );\n  false\n)",
+            "description": ""
+        },
+        {
+            "name": "student_permutation",
+            "definition": "try(\n  permutation(studentAnswer),\n  message,\n    warn(\"Your answer is not valid cycle notation: \"+message);\n    fail(\"Your answer is not valid cycle notation: \"+message)\n)",
+            "description": ""
+        },
+        {
+            "name": "is_transpositions",
+            "definition": "if(is_transpositions(studentAnswer),\n  true\n,\n  if(settings[\"must_be_transpositions\"],\n    set_credit(0,\"You have not written your answer as a product of transpositions.\")\n  );\n  false\n)",
+            "description": ""
+        }
+    ],
+    "can_be_gap": true,
+    "name": "Permutation in cycle notation",
+    "short_name": "write-a-permutation-in-cycle-notation",
+    "public_availability": "restricted",
+    "input_options": {
+        "allowEmpty": {
+            "static": true,
+            "value": false
+        },
+        "hint": {
+            "static": false,
+            "value": "if(settings[\"must_be_disjoint\"],\n  if(settings[\"must_be_transpositions\"],\n    \"Write a permutation in cycle notation as a product of disjoint transpositions.\",\n    \"Write a permutation in cycle notation as a product of disjoint cycles.\"\n  ),\n  if(settings[\"must_be_transpositions\"],\n    \"Write a permutation in cycle notation as a product of transpositions.\",\n    \"Write a permutation in cycle notation.\"\n  )\n)"
+        },
+        "correctAnswer": "if(settings[\"must_be_transpositions\"],\n  as_transpositions(settings[\"correct_answer\"]),\n  show(settings[\"correct_answer\"])\n)"
+    },
+    "can_be_step": true,
+    "description": "<p>The student must write a permutation in cycle notation. You can optionally require the cycles to be disjoint and/or all of length 2.</p>",
+    "marking_script": "mark:\napply(student_permutation);\napply(is_correct);\napply(is_disjoint);\napply(is_transpositions)\n\ninterpreted_answer:\nstudent_permutation\n\nis_correct:\ncorrectif(student_permutation=settings[\"correct_answer\"])\n\nis_disjoint:\nif(is_disjoint(studentAnswer),\n  true\n,\n  if(settings[\"must_be_disjoint\"],\n    set_credit(0,\"You have not written your answer as a product of disjoint cycles.\")\n  );\n  false\n)\n\nstudent_permutation:\ntry(\n  permutation(studentAnswer),\n  message,\n    warn(\"Your answer is not valid cycle notation: \"+message);\n    fail(\"Your answer is not valid cycle notation: \"+message)\n)\n\nis_transpositions:\nif(is_transpositions(studentAnswer),\n  true\n,\n  if(settings[\"must_be_transpositions\"],\n    set_credit(0,\"You have not written your answer as a product of transpositions.\")\n  );\n  false\n)",
+    "published": false
+}

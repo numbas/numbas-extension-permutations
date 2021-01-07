@@ -39,6 +39,8 @@ Numbas.addExtension('permutations',['jme','jme-display'],function(permutations) 
             }
             old = l[i];
         }
+
+        this.cycles();
     }
     Permutation.prototype = {
         map: function(n) {
@@ -104,6 +106,9 @@ Numbas.addExtension('permutations',['jme','jme-display'],function(permutations) 
                         cycle.push(i);
                         var oi = i;
                         i = this.map(i);
+                        if(i>=this.n || tmp[i]) {
+                            throw(new Numbas.Error("This permutation contains an invalid cycle starting "+cycle.join(', ')));
+                        }
                         if(i===undefined) {
                             throw(new Numbas.Error("Map goes to undefined"));
                         }

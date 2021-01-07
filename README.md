@@ -15,11 +15,17 @@ JME Functions
 
 ### `permutation(map)` or `perm(map)`
 
-Create a permutation. `map` is a list of numbers. `map[i]` is the image of `i` under the permutation. 
+Create a permutation. `map` is a list of numbers. `map[i]` is the image of `i` under the permutation.
+
+**Note**: Because lists are zero-indexed, the first element is `0`, not `1`.
+
+**Example**: `permutation([1,0])` is the permutation swapping the first two elements, equivalent to the cycle notation `(1,2)`.
 
 ### `permutation(str)` or `perm(str)`
 
-Create a permutation. `str` is a permutation in disjoint cycle notation (e.g. `"(1,2)(3,4,5)"`)
+Create a permutation. `str` is a permutation in disjoint cycle notation.
+
+**Example**: `permutation("(1,2)(3,4,5)")`
 
 ## `transposition(a,b)`
 

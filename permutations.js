@@ -19,6 +19,9 @@ Copyright 2014 Newcastle University
 */
 
 Numbas.addExtension('permutations',['jme','jme-display'],function(permutations) {
+
+    permutations.identity_symbol = 'e';
+
     var Permutation = permutations.Permutation = function(to) {
         if(to==undefined) {
             to = [];
@@ -145,6 +148,9 @@ Numbas.addExtension('permutations',['jme','jme-display'],function(permutations) 
                     out += '('+cycles[i].map(function(n){return n+1}).join(',')+')';
                 }
             }
+            if(out=='') {
+                return permutations.identity_symbol;
+            }
             return out;
         },
         twoLineLaTeX: function() {
@@ -211,6 +217,9 @@ Numbas.addExtension('permutations',['jme','jme-display'],function(permutations) 
     var re_cycle_elements = /\s*[,\s]\s*/g;
     var re_cycles = new RegExp('^\\s*(('+re_cycle_commas.source+')*|('+re_cycle_spaces.source+')*)\\s*$');
     Permutation.parse = function(str) {
+        if(str.trim()==permutations.identity_symbol) {
+            return [];
+        }
         if(!re_cycles.test(str)) {
             throw(new Error('Invalid cycle notation: '+str));
         }

@@ -5,6 +5,8 @@ This extension adds a new data type to the Numbas JME system, representing eleme
 
 Permutations are stored as bijections on the natural numbers.
 
+The symbol for the identity permutation is `e` by default. You can change this by setting `Numbas.extensions.permutations.identity_symbol` in the question preamble.
+
 JME data type
 -------------
 
@@ -19,7 +21,7 @@ Create a permutation. `map` is a list of numbers. `map[i]` is the image of `i` u
 
 **Note**: Because lists are zero-indexed, the first element is `0`, not `1`.
 
-**Example**: `permutation([1,0])` is the permutation swapping the first two elements, equivalent to the cycle notation `(1,2)`.
+**Example**: `permutation([1,0])` is the permutation swapping the first two elements and will be displayed in cycle notation as `(1,2)`.
 
 ### `permutation(str)` or `perm(str)`
 

@@ -154,7 +154,7 @@ Numbas.addExtension('permutations',['jme','jme-display'],function(permutations) 
             return out;
         },
         twoLineLaTeX: function() {
-            var out = '\\left[\\begin{array}{c} ';
+            var out = '\\left(\\begin{array}{c} ';
             for(var i=0;i<this.n;i++) {
                 if(i>0) {
                     out +=' & ';
@@ -168,7 +168,7 @@ Numbas.addExtension('permutations',['jme','jme-display'],function(permutations) 
                 }
                 out += (this.map(i)+1);
             }
-            out += ' \\end{array} \\right]';
+            out += ' \\end{array} \\right)';
             return out;
         },
         asTranspositions: function() {

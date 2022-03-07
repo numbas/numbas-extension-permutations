@@ -29,7 +29,14 @@ Create a permutation. `str` is a permutation in disjoint cycle notation.
 
 **Example**: `permutation("(1,2)(3,4,5)")`
 
-## `transposition(a,b)`
+### `cycle(list)`
+
+Create a permutation consisting of a single cycle, whose elements are the given list.
+The elements are zero-indexed, like for `permutation`.
+
+**Example**: `cycle([0,4,1]) = permutation([4,0,2,3,1])`
+
+### `transposition(a,b)`
 
 A permutation representing the transposition of the elements `a` and `b`.
 

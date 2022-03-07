@@ -265,6 +265,20 @@ Numbas.addExtension('permutations',['jme','jme-display'],function(permutations) 
         }
         return new Permutation(out);
     }
+    Permutation.fromCycle = function(cycle) {
+        var size = 0;
+        var p = [];
+        cycle.forEach(function(x,i) {
+            p[x] = cycle[(i+1)%cycle.length];
+            size = Math.max(size,x);
+        });
+        for(var i=0;i<=size;i++) {
+            if(p[i]===undefined) {
+                p[i] = i;
+            }
+        }
+        return new Permutation(p);
+    }
 
     Permutation.is_disjoint = function(str) {
         var seen = {};
@@ -394,6 +408,9 @@ Numbas.addExtension('permutations',['jme','jme-display'],function(permutations) 
     scope.addFunction(new funcObj('flip',[TNum],TPerm,function(n) {
         return dihedral(n).flip;
     }));
+    scope.addFunction(new funcObj('cycle',['list of number'],TPerm, function(cycle) {
+        return new TPerm(Permutation.fromCycle(cycle));
+    },{unwrapValues: true}));
     scope.addFunction(new funcObj('*',[TPerm,TPerm],TPerm,function(a,b) {
         return b.compose(a);
     }));

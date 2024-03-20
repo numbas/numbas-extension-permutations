@@ -4,6 +4,7 @@ Permutation groups extension for Numbas
 This extension adds a new data type to the Numbas JME system, representing elements of permutation groups (really, just S_infinity, but you can pretend you're working in an S_n).
 
 Permutations are stored as bijections on the natural numbers.
+In order to avoid running out of memory, trying to construct a permutation with an element larger than 1 million will throw an error.
 
 The symbol for the identity permutation is `e` by default. You can change this by setting `Numbas.extensions.permutations.identity_symbol` in the question preamble.
 

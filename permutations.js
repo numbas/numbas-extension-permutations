@@ -20,6 +20,8 @@ Copyright 2014 Newcastle University
 
 Numbas.addExtension('permutations',['jme','jme-display'],function(permutations) {
 
+    permutations.MAX_PERMUTATION_ORDER = 1e6;
+
     permutations.identity_symbol = 'e';
 
     var Permutation = permutations.Permutation = function(to) {
@@ -212,11 +214,12 @@ Numbas.addExtension('permutations',['jme','jme-display'],function(permutations) 
 
     }
 
-    var re_cycle_commas = /\(\s*(\d+(?:\s*,\s*\d+)*)\s*\)/g;
-    var re_cycle_spaces = /\(\s*(\d+(?:\s+\d+)*)\s*\)/g;
-    var re_cycle_elements = /\s*[,\s]\s*/g;
-    var re_cycles = new RegExp('^\\s*(('+re_cycle_commas.source+')*|('+re_cycle_spaces.source+')*)\\s*$');
     Permutation.parse = function(str) {
+        var re_cycle_commas = /\(\s*(\d+(?:\s*,\s*\d+)*)\s*\)/g;
+        var re_cycle_spaces = /\(\s*(\d+(?:\s+\d+)*)\s*\)/g;
+        var re_cycle_elements = /\s*[,\s]\s*/g;
+        var re_cycles = new RegExp('^\\s*(('+re_cycle_commas.source+')*|('+re_cycle_spaces.source+')*)\\s*$');
+
         if(str.trim()==permutations.identity_symbol) {
             return [];
         }
@@ -230,6 +233,9 @@ Numbas.addExtension('permutations',['jme','jme-display'],function(permutations) 
         while(m=r.exec(str)) {
             var numbers = m[1].trim().split(re_cycle_elements);
             numbers = numbers.map(function(n){ return parseInt(n)-1; });
+            if(numbers.some(function(n) { return n > permutations.MAX_PERMUTATION_ORDER; })) {
+                throw(new Numbas.Error("Please don't make a permutation with order bigger than "+permutations.MAX_PERMUTATION_ORDER+". Did you forget to put commas between some elements?"));
+            }
             cycles.push(numbers);
         }
         return cycles;

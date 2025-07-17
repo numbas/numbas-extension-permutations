@@ -124,7 +124,9 @@ Numbas.addExtension('permutations',['jme','jme-display'],function(permutations) 
                             throw(new Numbas.Error("Not a cycle!"));
                         }
                     }
-                    cycles.push(cycle);
+                    if(cycle.length > 1) {
+                        cycles.push(cycle);
+                    }
                 }
             }
             this._cycles = cycles;

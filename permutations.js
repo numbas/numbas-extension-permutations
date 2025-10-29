@@ -20,6 +20,11 @@ Copyright 2014 Newcastle University
 
 Numbas.addExtension('permutations',['jme','jme-display'],function(permutations) {
 
+    function addFunction(name, signature, outtype, fn, options) {
+        options = Object.assign({random: false}, options || {});
+        return permutations.scope.addFunction(new funcObj(name, signature, outtype, fn, options));
+    }
+
     permutations.MAX_PERMUTATION_ORDER = 1e6;
 
     permutations.identity_symbol = 'e';
@@ -393,11 +398,12 @@ Numbas.addExtension('permutations',['jme','jme-display'],function(permutations) 
     function jme_perm_fromString(s) {
         return Permutation.fromString(s);
     }
-    scope.addFunction(new funcObj('permutation',[TList],TPerm,jme_perm));
-    scope.addFunction(new funcObj('permutation',[TString],TPerm,jme_perm_fromString));
-    scope.addFunction(new funcObj('perm',[TList],TPerm,jme_perm));
-    scope.addFunction(new funcObj('perm',[TString],TPerm,jme_perm_fromString));
-    scope.addFunction(new funcObj('transposition',[TNum,TNum],TPerm,function(a,b) {
+
+    addFunction('permutation',[TList],TPerm,jme_perm);
+    addFunction('permutation',[TString],TPerm,jme_perm_fromString);
+    addFunction('perm',[TList],TPerm,jme_perm);
+    addFunction('perm',[TString],TPerm,jme_perm_fromString);
+    addFunction('transposition',[TNum,TNum],TPerm,function(a,b) {
         var n = Math.max(a,b);
         a -= 1;
         b -= 1;
@@ -406,54 +412,54 @@ Numbas.addExtension('permutations',['jme','jme-display'],function(permutations) 
             map.push(i==a ? b : i==b ? a : i);
         }
         return new Permutation(map);
-    }));
-    scope.addFunction(new funcObj('rotation',[TNum],TPerm,function(n) {
+    });
+    addFunction('rotation',[TNum],TPerm,function(n) {
         return dihedral(n).rotate;
-    }));
-    scope.addFunction(new funcObj('rotation',[TNum,TNum],TPerm,function(n,r) {
+    });
+    addFunction('rotation',[TNum,TNum],TPerm,function(n,r) {
         return dihedral(n).rotate.power(r);
-    }));
-    scope.addFunction(new funcObj('flip',[TNum],TPerm,function(n) {
+    });
+    addFunction('flip',[TNum],TPerm,function(n) {
         return dihedral(n).flip;
-    }));
-    scope.addFunction(new funcObj('cycle',['list of number'],TPerm, function(cycle) {
+    });
+    addFunction('cycle',['list of number'],TPerm, function(cycle) {
         return new TPerm(Permutation.fromCycle(cycle));
-    },{unwrapValues: true}));
-    scope.addFunction(new funcObj('*',[TPerm,TPerm],TPerm,function(a,b) {
+    },{unwrapValues: true});
+    addFunction('*',[TPerm,TPerm],TPerm,function(a,b) {
         return b.compose(a);
-    }));
-    scope.addFunction(new funcObj('compose',[TPerm,sig.multiple(sig.type('permutation'))],TPerm,function() {
+    });
+    addFunction('compose',[TPerm,sig.multiple(sig.type('permutation'))],TPerm,function() {
         var p = arguments[arguments.length-1];
         for(var i=arguments.length-2;i>=0;i--) {
             p = p.compose(arguments[i]);
         }
         return p;
-    }));
-    scope.addFunction(new funcObj('^',[TPerm,TNum],TPerm,function(p,n) {
+    });
+    addFunction('^',[TPerm,TNum],TPerm,function(p,n) {
         return p.power(n);
-    }));
-    scope.addFunction(new funcObj('listval',[TPerm,TNum],TNum,function(p,n) {
+    });
+    addFunction('listval',[TPerm,TNum],TNum,function(p,n) {
         return p.map(n-1)+1;
-    }));
-    scope.addFunction(new funcObj('inverse',[TPerm],TPerm,function(p) {
+    });
+    addFunction('inverse',[TPerm],TPerm,function(p) {
         return p.inverse();
-    }));
-    scope.addFunction(new funcObj('even',[TPerm],TBool,function(p) {
+    });
+    addFunction('even',[TPerm],TBool,function(p) {
         return p.even();
-    }));
-    scope.addFunction(new funcObj('size',[TPerm],TNum,function(p) {
+    });
+    addFunction('size',[TPerm],TNum,function(p) {
         return p.n;
-    }));
-    scope.addFunction(new funcObj('order',[TPerm],TNum,function(p) {
+    });
+    addFunction('order',[TPerm],TNum,function(p) {
         return p.order();
-    }));
-    scope.addFunction(new funcObj('cycles',[TPerm],TList,function(p) {
+    });
+    addFunction('cycles',[TPerm],TList,function(p) {
         return jme.wrapValue(p.cycles()).value;
-    }));
-    scope.addFunction(new funcObj('nontrivial_cycles',[TPerm],TList,function(p) {
+    });
+    addFunction('nontrivial_cycles',[TPerm],TList,function(p) {
         return jme.wrapValue(p.cycles().filter(function(c){return c.length>1})).value;
-    }));
-    scope.addFunction(new funcObj('show',[TPerm],TString,null,{
+    });
+    addFunction('show',[TPerm],TString,null,{
         // Kept for backwards compatibility: largely unnecessary, now that display.registerType provides a TeX rendering method.
         evaluate: function(args,scope) {
             var p = args[0].value;
@@ -461,36 +467,36 @@ Numbas.addExtension('permutations',['jme','jme-display'],function(permutations) 
             s.latex = true;
             return s;
         }
-    }));
-    scope.addFunction(new funcObj('twoline',[TPerm],TString,null,{
+    });
+    addFunction('twoline',[TPerm],TString,null,{
         evaluate: function(args,scope) {
             var p = args[0].value;
             var s = new TString(p.twoLineLaTeX());
             s.latex = true;
             return s;
         }
-    }));
-    scope.addFunction(new funcObj('as_transpositions',[TPerm],TString,null,{
+    });
+    addFunction('as_transpositions',[TPerm],TString,null,{
         evaluate: function(args,scope) {
             var p = args[0].value;
             var s = new TString(p.asTranspositions());
             s.latex = true;
             return s;
         }
-    }));
+    });
 
-    scope.addFunction(new funcObj('is_disjoint',[TString],TBool,function(s) {
+    addFunction('is_disjoint',[TString],TBool,function(s) {
         return Permutation.is_disjoint(s);
-    }));
-    scope.addFunction(new funcObj('is_transpositions',[TString],TBool,function(s) {
+    });
+    addFunction('is_transpositions',[TString],TBool,function(s) {
         return Permutation.is_transpositions(s);
-    }));
-    scope.addFunction(new funcObj('is_rotation',[TPerm],TBool,function(p) {
+    });
+    addFunction('is_rotation',[TPerm],TBool,function(p) {
         return p.is_rotation();
-    }));
-    scope.addFunction(new funcObj('is_flip',[TPerm],TBool,function(p) {
+    });
+    addFunction('is_flip',[TPerm],TBool,function(p) {
         return p.is_flip();
-    }));
+    });
 
 
 
